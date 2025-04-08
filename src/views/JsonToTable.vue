@@ -99,33 +99,41 @@ watch(jsonInput, (newValue) => {
               <h3 class="mt-2 text-sm font-medium text-gray-900">暂无数据</h3>
               <p class="mt-1 text-sm text-gray-500">请输入有效的 JSON 数组来生成表格</p>
             </div>
-            <div v-else class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th
-                      v-for="header in headers"
-                      :key="header"
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      {{ header }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="(row, index) in jsonData" :key="index" class="hover:bg-gray-50">
-                    <td
-                      v-for="header in headers"
-                      :key="header"
-                      class="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 cursor-pointer hover:bg-gray-100"
-                      @dblclick="handleCellDoubleClick(row[header])"
-                    >
-                      {{ row[header] }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div v-else>
+              <div class="bg-indigo-50 border-b border-indigo-100 px-6 py-3 text-sm text-indigo-700 flex items-center">
+                <svg class="h-5 w-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p>提示：双击表格中的单元格可以继续解析其中的 JSON 内容</p>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th
+                        v-for="header in headers"
+                        :key="header"
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        {{ header }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(row, index) in jsonData" :key="index" class="hover:bg-gray-50">
+                      <td
+                        v-for="header in headers"
+                        :key="header"
+                        class="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 cursor-pointer hover:bg-gray-100"
+                        @dblclick="handleCellDoubleClick(row[header])"
+                      >
+                        {{ row[header] }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

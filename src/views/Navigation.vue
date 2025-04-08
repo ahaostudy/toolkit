@@ -6,7 +6,9 @@ import {
   XMarkIcon,
   TableCellsIcon,
   PlusIcon,
-  ClockIcon
+  ClockIcon,
+  CodeBracketIcon,
+  GlobeAltIcon
 } from '@heroicons/vue/24/outline'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
@@ -16,6 +18,8 @@ const route = useRoute()
 const navigation = ref([
   { name: 'JSON转表格', path: '/json-to-table', icon: TableCellsIcon },
   { name: '时间戳工具', path: '/timestamp', icon: ClockIcon },
+  { name: '编码转换', path: '/encoding', icon: CodeBracketIcon },
+  { name: 'IP地址查询', path: '/ip-lookup', icon: GlobeAltIcon },
   { name: '更多工具', path: '/more', icon: PlusIcon },
 ])
 
@@ -67,7 +71,12 @@ const isCurrentRoute = (path: string) => route.path === path
                 <div class="flex h-16 shrink-0 items-center">
                   <div class="flex flex-shrink-0 items-center">
                     <img src="/favicon.svg" alt="ToolKit Logo" class="h-7 w-7" />
-                    <h1 class="ml-2 text-lg font-semibold text-gray-900">ToolKit</h1>
+                    <h1 
+                      @click="router.push('/')"
+                      class="ml-2 text-lg font-semibold text-gray-900 cursor-pointer hover:text-indigo-600"
+                    >
+                      ToolKit
+                    </h1>
                   </div>
                 </div>
                 <nav class="flex flex-1 flex-col">
@@ -115,7 +124,12 @@ const isCurrentRoute = (path: string) => route.path === path
         <div class="flex h-16 shrink-0 items-center">
           <div class="flex flex-shrink-0 items-center">
             <img src="/favicon.svg" alt="ToolKit Logo" class="h-7 w-7" />
-            <h1 class="ml-2 text-lg font-semibold text-gray-900">ToolKit</h1>
+            <h1 
+              @click="router.push('/')"
+              class="ml-2 text-lg font-semibold text-gray-900 cursor-pointer hover:text-indigo-600"
+            >
+              ToolKit
+            </h1>
           </div>
         </div>
         <nav class="flex flex-1 flex-col">
@@ -165,7 +179,12 @@ const isCurrentRoute = (path: string) => route.path === path
       </button>
       <div class="flex items-center flex-1">
         <img src="/favicon.svg" alt="ToolKit Logo" class="h-6 w-6" />
-        <span class="ml-2 text-sm font-semibold leading-6 text-gray-900">ToolKit</span>
+        <h1 
+          @click="router.push('/')"
+          class="ml-2 text-lg font-semibold text-gray-900 cursor-pointer hover:text-indigo-600"
+        >
+          ToolKit
+        </h1>
       </div>
     </div>
   </div>

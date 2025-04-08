@@ -1,26 +1,37 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/json-to-table'
+      name: 'home',
+      component: () => import('../views/HomeView.vue')
     },
     {
       path: '/json-to-table',
-      name: 'JsonToTable',
-      component: () => import('../components/JsonToTable.vue')
+      name: 'json-to-table',
+      component: () => import('../views/JsonToTable.vue')
     },
     {
       path: '/timestamp',
-      name: 'TimestampTool',
-      component: () => import('../components/TimestampTool.vue')
+      name: 'timestamp',
+      component: () => import('../views/TimestampTool.vue')
+    },
+    {
+      path: '/encoding',
+      name: 'encoding',
+      component: () => import('../views/EncodingTool.vue')
+    },
+    {
+      path: '/ip-lookup',
+      name: 'ip-lookup',
+      component: () => import('../views/IpLookup.vue')
     },
     {
       path: '/more',
-      name: 'More',
-      component: () => import('../components/More.vue')
+      name: 'more',
+      component: () => import('../views/MoreView.vue')
     }
   ]
 })
