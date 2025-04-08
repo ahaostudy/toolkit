@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import JsonToTable from '../components/JsonToTable.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -11,7 +10,12 @@ const router = createRouter({
     {
       path: '/json-to-table',
       name: 'JsonToTable',
-      component: JsonToTable
+      component: () => import('../components/JsonToTable.vue')
+    },
+    {
+      path: '/timestamp',
+      name: 'TimestampTool',
+      component: () => import('../components/TimestampTool.vue')
     },
     {
       path: '/more',

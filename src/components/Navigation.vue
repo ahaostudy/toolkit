@@ -5,7 +5,8 @@ import {
   Bars3Icon, 
   XMarkIcon,
   TableCellsIcon,
-  PlusIcon
+  PlusIcon,
+  ClockIcon
 } from '@heroicons/vue/24/outline'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
@@ -14,6 +15,7 @@ const route = useRoute()
 
 const navigation = ref([
   { name: 'JSON转表格', path: '/json-to-table', icon: TableCellsIcon },
+  { name: '时间戳工具', path: '/timestamp', icon: ClockIcon },
   { name: '更多工具', path: '/more', icon: PlusIcon },
 ])
 
