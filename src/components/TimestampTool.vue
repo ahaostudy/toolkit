@@ -12,6 +12,7 @@ const selectedDate = ref<Date | null>(null)
 const selectedTimezone = ref(dayjs.tz.guess())
 const customFormat = ref('YYYY-MM-DD HH:mm:ss')
 const timeInput = ref('')
+const timeUnit = ref('d')
 const result = ref('')
 const timestampInput = ref('')
 const timestampUnit = ref<'ms' | 's'>('ms')
@@ -58,29 +59,37 @@ const formatTime = (date: Date | null, format: string) => {
 // 时间计算
 const calculateTime = () => {
   try {
-    const [value, unit] = timeInput.value.split(' ')
-    const num = parseInt(value)
+    const num = parseInt(timeInput.value)
     if (isNaN(num)) {
       result.value = '请输入有效的数字'
       return
     }
     
     let calculatedDate = dayjs()
-    switch(unit?.toLowerCase()) {
-      case 'days':
-      case 'day':
+    switch(timeUnit.value) {
+      case 'y':
+        calculatedDate = calculatedDate.add(num, 'year')
+        break
+      case 'm':
+        calculatedDate = calculatedDate.add(num, 'month')
+        break
+      case 'w':
+        calculatedDate = calculatedDate.add(num, 'week')
+        break
+      case 'd':
         calculatedDate = calculatedDate.add(num, 'day')
         break
-      case 'hours':
-      case 'hour':
+      case 'h':
         calculatedDate = calculatedDate.add(num, 'hour')
         break
-      case 'minutes':
-      case 'minute':
+      case 'min':
         calculatedDate = calculatedDate.add(num, 'minute')
         break
+      case 's':
+        calculatedDate = calculatedDate.add(num, 'second')
+        break
       default:
-        result.value = '请指定时间单位 (days/hours/minutes)'
+        result.value = '请选择有效的时间单位'
         return
     }
     
@@ -149,9 +158,9 @@ const setCurrentTime = () => {
               <label class="block text-sm font-medium text-gray-700">当前时间戳</label>
               <div class="mt-1 relative rounded-md shadow-sm">
                 <div class="block w-full rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 bg-white">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                      <div>
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                      <div class="mb-2 sm:mb-0">
                         <span class="text-sm text-gray-500">毫秒:</span>
                         <span class="text-xl font-mono ml-1">{{ currentTimestamp }}</span>
                       </div>
@@ -160,7 +169,7 @@ const setCurrentTime = () => {
                         <span class="text-xl font-mono ml-1">{{ currentTimestampInSeconds }}</span>
                       </div>
                     </div>
-                    <div class="flex space-x-2">
+                    <div class="flex space-x-2 mt-2 sm:mt-0">
                       <button 
                         @click="copyTimestamp(currentTimestamp)"
                         class="inline-flex items-center rounded-md bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
@@ -189,7 +198,7 @@ const setCurrentTime = () => {
             <div>
               <label class="block text-sm font-medium text-gray-700">时间</label>
               <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="flex gap-2">
+                <div class="flex flex-col sm:flex-row gap-2">
                   <input 
                     type="datetime-local" 
                     v-model="selectedDate"
@@ -197,14 +206,14 @@ const setCurrentTime = () => {
                   >
                   <button 
                     @click="setCurrentTime"
-                    class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
+                    class="inline-flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
                   >
                     设为当前时间
                   </button>
                 </div>
                 <div v-if="selectedDate" class="mt-2 text-sm text-gray-500">
-                  <div class="flex items-center space-x-4">
-                    <div>
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                    <div class="mb-2 sm:mb-0">
                       <span class="text-xs text-gray-500">毫秒时间戳:</span>
                       <span class="font-mono ml-1">{{ dateToTimestamp(selectedDate) }}</span>
                     </div>
@@ -223,7 +232,7 @@ const setCurrentTime = () => {
             <div>
               <label class="block text-sm font-medium text-gray-700">时间戳转日期</label>
               <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="flex gap-2">
+                <div class="flex flex-col sm:flex-row gap-2">
                   <input 
                     v-model="timestampInput"
                     class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
@@ -231,14 +240,14 @@ const setCurrentTime = () => {
                   >
                   <select 
                     v-model="timestampUnit"
-                    class="block w-24 rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
+                    class="block w-full sm:w-24 rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
                   >
                     <option value="ms">毫秒</option>
                     <option value="s">秒</option>
                   </select>
                   <button 
                     @click="convertTimestampToDate"
-                    class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
+                    class="inline-flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
                   >
                     转换
                   </button>
@@ -292,15 +301,28 @@ const setCurrentTime = () => {
             <div>
               <label class="block text-sm font-medium text-gray-700">时间计算</label>
               <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="flex gap-2">
+                <div class="flex flex-col sm:flex-row gap-2">
                   <input 
                     v-model="timeInput"
                     class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                    placeholder="输入计算表达式 (例如: 2 days)"
+                    placeholder="输入数字"
+                    type="number"
                   >
+                  <select 
+                    v-model="timeUnit"
+                    class="block w-full sm:w-24 rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
+                  >
+                    <option value="y">年</option>
+                    <option value="m">月</option>
+                    <option value="w">周</option>
+                    <option value="d">天</option>
+                    <option value="h">小时</option>
+                    <option value="min">分钟</option>
+                    <option value="s">秒</option>
+                  </select>
                   <button 
                     @click="calculateTime"
-                    class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
+                    class="inline-flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
                   >
                     计算
                   </button>
