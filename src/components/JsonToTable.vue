@@ -69,7 +69,7 @@ watch(jsonInput, (newValue) => {
                   id="json-input"
                   v-model="jsonInput"
                   rows="10"
-                  class="block w-full rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white [&:not(:focus)]:bg-white"
                   placeholder='[{"name": "张三", "age": 25}, {"name": "李四", "age": 30}]'
                 ></textarea>
               </div>
