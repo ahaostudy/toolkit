@@ -5,7 +5,8 @@ import {
   TableCellsIcon,
   ClockIcon,
   CodeBracketIcon,
-  GlobeAltIcon
+  GlobeAltIcon,
+  SwatchIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -34,6 +35,12 @@ const tools = ref([
     description: '查询当前IP地址的详细信息',
     path: '/ip-lookup',
     icon: GlobeAltIcon
+  },
+  {
+    name: '颜色工具',
+    description: '颜色选择器、调色板、CSS渐变生成器',
+    path: '/color-tools',
+    icon: SwatchIcon
   }
 ])
 </script>

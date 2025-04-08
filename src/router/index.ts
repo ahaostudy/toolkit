@@ -29,6 +29,11 @@ const router = createRouter({
       component: () => import('../views/IpLookup.vue')
     },
     {
+      path: '/color-tools',
+      name: 'color-tools',
+      component: () => import('../views/ColorTools.vue')
+    },
+    {
       path: '/more',
       name: 'more',
       component: () => import('../views/MoreView.vue')
