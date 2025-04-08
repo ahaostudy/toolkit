@@ -92,17 +92,6 @@ const hueSlider = ref<HTMLElement | null>(null)
 const saturationPanel = ref<HTMLElement | null>(null)
 const alphaSlider = ref<HTMLElement | null>(null)
 
-// 计算属性：当前颜色
-const currentColor = computed({
-  get: () => {
-    // 直接返回父组件的值，确保显示的是外部传入的准确值
-    return props.modelValue;
-  },
-  set: (newColor) => {
-    emit('update:modelValue', newColor);
-  }
-})
-
 // 计算属性：色相颜色 - 基于当前hue值
 const hueColorComputed = computed(() => {
   return `hsl(${hue.value * 360}, 100%, 50%)`

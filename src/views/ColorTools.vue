@@ -412,7 +412,7 @@ const updateColorValue = (index: number, event: Event) => {
   const currentColor = gradientColors.value[index].value
   
   try {
-    const [r, g, b, a] = parseToRgba(currentColor)
+    const [, , , a] = parseToRgba(currentColor)
     gradientColors.value[index].value = `rgba(${parseInt(newColor.slice(1, 3), 16)}, ${parseInt(newColor.slice(3, 5), 16)}, ${parseInt(newColor.slice(5, 7), 16)}, ${a})`
   } catch (e) {
     gradientColors.value[index].value = newColor
