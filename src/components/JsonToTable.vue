@@ -1,28 +1,54 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, watch } from 'vue'
 
 const jsonInput = ref('')
+const jsonData = ref<any[]>([])
+const headers = ref<string[]>([])
 const error = ref('')
 
-const tableData = computed(() => {
+const handleCellDoubleClick = (content: any) => {
   try {
-    if (!jsonInput.value) return []
-    const parsed = JSON.parse(jsonInput.value)
-    if (!Array.isArray(parsed)) {
-      error.value = '请输入有效的 JSON 数组'
-      return []
+    // 如果内容是对象或数组，转换为 JSON 字符串
+    if (typeof content === 'object' && content !== null) {
+      jsonInput.value = JSON.stringify(content, null, 2)
+    } else {
+      // 尝试解析内容是否为 JSON 字符串
+      const parsed = JSON.parse(content)
+      jsonInput.value = JSON.stringify(parsed, null, 2)
+    }
+  } catch (e) {
+    // 如果不是 JSON，不做任何处理
+  }
+}
+
+watch(jsonInput, (newValue) => {
+  try {
+    if (!newValue) {
+      jsonData.value = []
+      headers.value = []
+      error.value = ''
+      return
+    }
+    
+    const parsed = JSON.parse(newValue)
+    if (Array.isArray(parsed)) {
+      jsonData.value = parsed
+      if (parsed.length > 0) {
+        headers.value = Object.keys(parsed[0])
+      }
+    } else if (typeof parsed === 'object' && parsed !== null) {
+      // 如果是单个对象，转换为数组形式
+      jsonData.value = [parsed]
+      headers.value = Object.keys(parsed)
+    } else {
+      throw new Error('请输入有效的 JSON 数组或对象')
     }
     error.value = ''
-    return parsed
   } catch (e) {
     error.value = '请输入有效的 JSON 格式'
-    return []
+    jsonData.value = []
+    headers.value = []
   }
-})
-
-const headers = computed(() => {
-  if (tableData.value.length === 0) return []
-  return Object.keys(tableData.value[0])
 })
 </script>
 
@@ -37,7 +63,7 @@ const headers = computed(() => {
         <div class="mt-5 space-y-6">
           <div class="space-y-4">
             <div>
-              <label for="json-input" class="block text-sm font-medium text-gray-700">JSON 输入</label>
+              <label for="json-input" class="block text-sm font-medium text-gray-700">JSON 数据</label>
               <div class="mt-1 relative rounded-md shadow-sm">
                 <textarea
                   id="json-input"
@@ -47,18 +73,18 @@ const headers = computed(() => {
                   placeholder='[{"name": "张三", "age": 25}, {"name": "李四", "age": 30}]'
                 ></textarea>
               </div>
-            </div>
-            <div v-if="error" class="rounded-md bg-red-50 p-4">
-              <div class="flex">
-                <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <div class="ml-3">
-                  <h3 class="text-sm font-medium text-red-800">输入错误</h3>
-                  <div class="mt-2 text-sm text-red-700">
-                    <p>{{ error }}</p>
+              <div v-if="error" class="mt-4 rounded-md bg-red-50 p-4">
+                <div class="flex">
+                  <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">输入错误</h3>
+                    <div class="mt-2 text-sm text-red-700">
+                      <p>{{ error }}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -66,7 +92,7 @@ const headers = computed(() => {
           </div>
 
           <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow">
-            <div v-if="tableData.length === 0" class="flex flex-col items-center justify-center py-12 px-4">
+            <div v-if="jsonData.length === 0" class="flex flex-col items-center justify-center py-12 px-4">
               <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -88,11 +114,12 @@ const headers = computed(() => {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="(row, index) in tableData" :key="index" class="hover:bg-gray-50">
+                  <tr v-for="(row, index) in jsonData" :key="index" class="hover:bg-gray-50">
                     <td
                       v-for="header in headers"
                       :key="header"
-                      class="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500"
+                      class="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 cursor-pointer hover:bg-gray-100"
+                      @dblclick="handleCellDoubleClick(row[header])"
                     >
                       {{ row[header] }}
                     </td>
