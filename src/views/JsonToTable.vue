@@ -5,9 +5,13 @@ const jsonInput = ref('')
 const jsonData = ref<any[]>([])
 const headers = ref<string[]>([])
 const error = ref('')
+const jsonHistory = ref<string[]>([])
 
 const handleCellDoubleClick = (content: any) => {
   try {
+    // 保存当前内容到历史记录
+    jsonHistory.value.push(jsonInput.value)
+    
     // 如果内容是对象或数组，转换为 JSON 字符串
     if (typeof content === 'object' && content !== null) {
       jsonInput.value = JSON.stringify(content, null, 2)
@@ -18,6 +22,12 @@ const handleCellDoubleClick = (content: any) => {
     }
   } catch (e) {
     // 如果不是 JSON，不做任何处理
+  }
+}
+
+const goBack = () => {
+  if (jsonHistory.value.length > 0) {
+    jsonInput.value = jsonHistory.value.pop() || ''
   }
 }
 
@@ -100,11 +110,20 @@ watch(jsonInput, (newValue) => {
               <p class="mt-1 text-sm text-gray-500">请输入有效的 JSON 数组来生成表格</p>
             </div>
             <div v-else>
-              <div class="bg-indigo-50 border-b border-indigo-100 px-6 py-3 text-sm text-indigo-700 flex items-center">
-                <svg class="h-5 w-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p>提示：双击表格中的单元格可以继续解析其中的 JSON 内容</p>
+              <div class="bg-indigo-50 border-b border-indigo-100 px-6 py-3 text-sm text-indigo-700 flex items-center justify-between">
+                <div class="flex items-center">
+                  <svg class="h-5 w-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p>提示：双击表格中的单元格可以继续解析其中的 JSON 内容</p>
+                </div>
+                <button
+                  @click="goBack"
+                  :disabled="jsonHistory.length === 0"
+                  class="inline-flex items-center rounded-md bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  返回上级
+                </button>
               </div>
               <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
