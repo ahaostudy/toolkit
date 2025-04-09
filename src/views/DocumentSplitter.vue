@@ -15,7 +15,7 @@
               <div class="mt-1 relative rounded-md shadow-sm">
                 <textarea
                   v-model="inputText"
-                  rows="6"
+                  rows="8"
                   class="block w-full rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
                   placeholder="请输入要分割的文本"
                 ></textarea>
@@ -28,7 +28,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700">选择分隔符</label>
               <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="flex flex-col sm:flex-row gap-2">
+                <div class="flex flex-col gap-2">
                   <select 
                     v-model="selectedDelimiter" 
                     class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
@@ -40,17 +40,10 @@
                     <option value="\t">制表符</option>
                     <option value="custom">自定义</option>
                   </select>
-                  <input 
-                    v-if="selectedDelimiter === 'custom'"
-                    v-model="customDelimiter" 
-                    type="text" 
-                    class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                    placeholder="输入自定义分隔符"
-                  >
                   <textarea
                     v-if="selectedDelimiter === 'custom'"
                     v-model="customDelimiter"
-                    rows="2"
+                    rows="1"
                     class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
                     placeholder="输入自定义分隔符"
                   ></textarea>
@@ -192,7 +185,7 @@
                 <div class="mt-1 relative rounded-md shadow-sm">
                   <textarea
                     v-model="mergedText"
-                    rows="6"
+                    rows="8"
                     class="block w-full rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
                     readonly
                   ></textarea>
