@@ -66,7 +66,7 @@ watch(jsonInput, (newValue) => {
   <div class="space-y-6">
     <div class="bg-white shadow sm:rounded-lg">
       <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-base font-semibold leading-6 text-gray-900">JSON 转表格</h3>
+        <h3 class="text-base font-semibold leading-6 text-gray-900">JSON 表格</h3>
         <div class="mt-2 max-w-xl text-sm text-gray-500">
           <p>将 JSON 数组转换为表格格式</p>
         </div>

@@ -1,32 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { 
-  Bars3Icon, 
-  XMarkIcon,
-  TableCellsIcon,
-  PlusIcon,
-  ClockIcon,
-  CodeBracketIcon,
-  GlobeAltIcon,
-  SwatchIcon,
-  DocumentTextIcon
-} from '@heroicons/vue/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { navigationTools } from '../config/tools'
 
 const router = useRouter()
 const route = useRoute()
-
-const navigation = ref([
-  { name: 'JSON转表格', path: '/json-to-table', icon: TableCellsIcon },
-  { name: '时间戳工具', path: '/timestamp', icon: ClockIcon },
-  { name: '编码转换', path: '/encoding', icon: CodeBracketIcon },
-  { name: 'IP地址查询', path: '/ip-lookup', icon: GlobeAltIcon },
-  { name: '颜色工具', path: '/color-tools', icon: SwatchIcon },
-  { name: '文档分割', path: '/document-splitter', icon: DocumentTextIcon },
-  { name: '更多工具', path: '/more', icon: PlusIcon },
-])
-
+const navigation = ref(navigationTools)
 const sidebarOpen = ref(false)
 
 const isCurrentRoute = (path: string) => route.path === path
@@ -90,7 +71,7 @@ const isCurrentRoute = (path: string) => route.path === path
                         <li v-for="item in navigation" :key="item.name">
                           <button
                             type="button"
-                            @click="router.push(item.path); sidebarOpen = false"
+                            @click="router.push(item.path)"
                             :class="[
                               isCurrentRoute(item.path)
                                 ? 'bg-gray-50 text-indigo-600'

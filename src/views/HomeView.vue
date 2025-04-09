@@ -1,55 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { 
-  TableCellsIcon,
-  ClockIcon,
-  CodeBracketIcon,
-  GlobeAltIcon,
-  SwatchIcon,
-  DocumentTextIcon
-} from '@heroicons/vue/24/outline'
+import { implementedTools } from '../config/tools'
 
 const router = useRouter()
-
-const tools = ref([
-  {
-    name: 'JSON转表格',
-    description: '将JSON数据转换为表格形式展示',
-    path: '/json-to-table',
-    icon: TableCellsIcon
-  },
-  {
-    name: '时间戳工具',
-    description: '时间戳转换、时区转换等功能',
-    path: '/timestamp',
-    icon: ClockIcon
-  },
-  {
-    name: '编码转换',
-    description: '支持多种编码格式的转换工具',
-    path: '/encoding',
-    icon: CodeBracketIcon
-  },
-  {
-    name: 'IP地址查询',
-    description: '查询当前IP地址的详细信息',
-    path: '/ip-lookup',
-    icon: GlobeAltIcon
-  },
-  {
-    name: '颜色工具',
-    description: '颜色选择器、调色板、CSS渐变生成器',
-    path: '/color-tools',
-    icon: SwatchIcon
-  },
-  {
-    name: '文档分割工具',
-    description: '支持多种分隔符的文本分割与合并工具',
-    path: '/document-splitter',
-    icon: DocumentTextIcon
-  }
-])
+const tools = ref(implementedTools)
 </script>
 
 <template>
