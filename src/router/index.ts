@@ -39,6 +39,11 @@ const router = createRouter({
       component: () => import('../views/DocumentSplitter.vue')
     },
     {
+      path: '/html-preview',
+      name: 'html-preview',
+      component: () => import('../views/HtmlPreview.vue')
+    },
+    {
       path: '/more',
       name: 'more',
       component: () => import('../views/MoreView.vue')

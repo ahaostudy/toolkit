@@ -12,7 +12,8 @@ import {
   MusicalNoteIcon,
   CalculatorIcon,
   DocumentDuplicateIcon,
-  PlusIcon
+  PlusIcon,
+  CodeBracketSquareIcon
 } from '@heroicons/vue/24/outline'
 
 // 工具类型定义
@@ -61,6 +62,12 @@ export const implementedTools: Tool[] = [
     description: '支持多种分隔符的文本分割与合并工具',
     path: '/document-splitter',
     icon: DocumentTextIcon
+  },
+  {
+    name: 'HTML预览',
+    description: '实时预览HTML代码效果',
+    path: '/html-preview',
+    icon: CodeBracketSquareIcon
   }
 ]
 
