@@ -6,7 +6,8 @@ import {
   ClockIcon,
   CodeBracketIcon,
   GlobeAltIcon,
-  SwatchIcon
+  SwatchIcon,
+  DocumentTextIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -41,6 +42,12 @@ const tools = ref([
     description: '颜色选择器、调色板、CSS渐变生成器',
     path: '/color-tools',
     icon: SwatchIcon
+  },
+  {
+    name: '文档分割工具',
+    description: '支持多种分隔符的文本分割与合并工具',
+    path: '/document-splitter',
+    icon: DocumentTextIcon
   }
 ])
 </script>

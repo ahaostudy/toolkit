@@ -34,6 +34,11 @@ const router = createRouter({
       component: () => import('../views/ColorTools.vue')
     },
     {
+      path: '/document-splitter',
+      name: 'document-splitter',
+      component: () => import('../views/DocumentSplitter.vue')
+    },
+    {
       path: '/more',
       name: 'more',
       component: () => import('../views/MoreView.vue')

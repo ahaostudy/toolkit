@@ -9,7 +9,8 @@ import {
   ClockIcon,
   CodeBracketIcon,
   GlobeAltIcon,
-  SwatchIcon
+  SwatchIcon,
+  DocumentTextIcon
 } from '@heroicons/vue/24/outline'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
@@ -22,6 +23,7 @@ const navigation = ref([
   { name: '编码转换', path: '/encoding', icon: CodeBracketIcon },
   { name: 'IP地址查询', path: '/ip-lookup', icon: GlobeAltIcon },
   { name: '颜色工具', path: '/color-tools', icon: SwatchIcon },
+  { name: '文档分割', path: '/document-splitter', icon: DocumentTextIcon },
   { name: '更多工具', path: '/more', icon: PlusIcon },
 ])
 
