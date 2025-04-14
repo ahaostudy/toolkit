@@ -37,7 +37,7 @@
 
             <!-- 文件上传区域 -->
             <div v-if="inputMode === 'file'"
-              class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer hover:border-indigo-500 transition-colors"
+              class="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-12 text-center cursor-pointer hover:border-indigo-500 transition-colors"
               @dragover.prevent
               @drop.prevent="handleDrop"
               @click="triggerFileInput"
@@ -45,16 +45,17 @@
               <input
                 ref="fileInput"
                 type="file"
-                accept=".csv"
+                accept=".csv,.xlsx,.xls"
                 class="hidden"
                 @change="handleFileUpload"
               />
               <div class="space-y-4">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="mx-auto h-8 sm:h-12 w-8 sm:w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
-                <p class="text-gray-600">拖拽文件到此处或点击上传</p>
-                <p class="text-sm text-gray-500">支持CSV文件</p>
+                <p v-if="!fileName" class="text-gray-600 text-sm sm:text-base">拖拽文件到此处或点击上传</p>
+                <p v-else class="text-gray-600 text-sm sm:text-base">已上传文件: {{ fileName }}</p>
+                <p class="text-xs sm:text-sm text-gray-500">支持CSV、Excel文件</p>
               </div>
             </div>
 
@@ -64,10 +65,10 @@
                 <textarea
                   id="csv-input"
                   v-model="csvText"
-                  class="block w-full rounded-md border-0 !py-2 !px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white [&:not(:focus)]:bg-white"
+                  class="block w-full rounded-md border-0 !py-2 !px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:text-base sm:leading-6 bg-white [&:not(:focus)]:bg-white h-[240px] resize-none overflow-y-auto"
                   placeholder="请输入CSV格式的数据，每行一条记录，字段之间用逗号分隔"
-                  style="height: 250px; resize: none;"
                   @input="handleTextInput"
+                  style="height: 240px !important;"
                 ></textarea>
               </div>
             </div>
@@ -81,35 +82,38 @@
           <div v-else-if="csvData.length" class="mt-6">
             <!-- 导出按钮 -->
             <div class="mb-4">
-              <div class="grid grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
                 <button
                   @click="downloadCsv"
-                  class="w-full inline-flex items-center justify-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-blue-200 hover:bg-blue-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="w-full inline-flex items-center justify-center rounded-lg bg-blue-50 px-4 py-3 sm:py-4 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-blue-200 hover:bg-blue-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   :disabled="!csvData.length"
                 >
-                  <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <svg class="h-5 w-5 sm:h-6 sm:w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 8h.01M12 8h.01M16 8h.01" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.01M12 16h.01M16 16h.01" />
                   </svg>
                   导出CSV
                 </button>
                 <button
                   @click="downloadExcel"
-                  class="w-full inline-flex items-center justify-center rounded-lg bg-green-50 px-4 py-2 text-sm font-semibold text-green-600 shadow-sm ring-1 ring-inset ring-green-200 hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="w-full inline-flex items-center justify-center rounded-lg bg-green-50 px-4 py-3 sm:py-4 text-sm font-semibold text-green-600 shadow-sm ring-1 ring-inset ring-green-200 hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   :disabled="!csvData.length"
                 >
-                  <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg class="h-5 w-5 sm:h-6 sm:w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                   导出Excel
                 </button>
                 <button
                   @click="copyToClipboard"
-                  class="w-full inline-flex items-center justify-center rounded-lg bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 shadow-sm ring-1 ring-inset ring-indigo-200 hover:bg-indigo-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="w-full inline-flex items-center justify-center rounded-lg bg-indigo-50 px-4 py-3 sm:py-4 text-sm font-semibold text-indigo-600 shadow-sm ring-1 ring-inset ring-indigo-200 hover:bg-indigo-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   :disabled="!csvData.length"
                 >
                   <svg 
                     v-if="!copySuccess"
-                    class="h-5 w-5 mr-2" 
+                    class="h-5 w-5 sm:h-6 sm:w-6 mr-2" 
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor"
@@ -118,7 +122,7 @@
                   </svg>
                   <svg 
                     v-else 
-                    class="h-5 w-5 mr-2" 
+                    class="h-5 w-5 sm:h-6 sm:w-6 mr-2" 
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor"
@@ -131,79 +135,83 @@
             </div>
 
             <!-- 表格 -->
-            <div class="overflow-x-auto border border-gray-300 rounded relative">
-              <table class="border-collapse w-full">
-                <colgroup>
-                  <col style="width: 60px">
-                  <col v-for="(_, index) in headers" :key="index" :style="{ width: getColumnWidth(index) + 'px' }">
-                </colgroup>
-                <thead class="sticky top-0 z-10">
-                  <tr class="relative">
-                    <th class="py-1 px-2 text-center text-sm font-semibold text-gray-900 bg-gray-100 border-r border-gray-300 select-none relative"
+            <div class="overflow-x-auto border border-gray-200 rounded relative">
+              <div class="min-w-full">
+                <table class="border-collapse w-full">
+                  <colgroup>
+                    <col style="width: 40px">
+                    <col v-for="(_, index) in headers" :key="index" :style="{ width: getColumnWidth(index) + 'px' }">
+                  </colgroup>
+                  <thead class="sticky top-0 z-10">
+                    <tr class="relative">
+                      <th class="py-1 px-2 text-center text-sm font-semibold text-gray-900 bg-gray-100 border-r border-gray-200 select-none relative"
+                      >
+                      </th>
+                      <th
+                        v-for="(header, index) in headers"
+                        :key="index"
+                        class="py-1 px-2 text-center text-sm font-semibold text-gray-900 bg-gray-100 border-r border-gray-200 relative select-none"
+                        :class="{
+                          'dragging': isDragging && dragSourceIndex === index,
+                          'drag-over': isDragging && dragOverIndex === index
+                        }"
+                        draggable="true"
+                        @dragstart="handleHeaderDragStart($event, index)"
+                        @dragover.prevent="handleHeaderDragOver($event, index)"
+                        @dragenter.prevent="handleHeaderDragEnter($event, index)"
+                        @dragleave.prevent="handleHeaderDragLeave($event, index)"
+                        @drop="handleHeaderDrop($event, index)"
+                        @touchstart="handleTouchStart($event, index)"
+                        @touchmove="handleTouchMove($event, index)"
+                        @touchend="handleTouchEnd($event, index)"
+                      >
+                        <div class="flex items-center justify-center h-full">
+                          {{ header }}
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr 
+                      v-for="(row, rowIndex) in paginatedData" 
+                      :key="rowIndex"
+                      class="hover:bg-gray-50"
                     >
-                      序号
-                    </th>
-                    <th
-                      v-for="(header, index) in headers"
-                      :key="index"
-                      class="py-1 px-2 text-center text-sm font-semibold text-gray-900 bg-gray-100 border-r border-gray-300 relative select-none"
-                      :class="{
-                        'dragging': isDragging && dragSourceIndex === index,
-                        'drag-over': isDragging && dragOverIndex === index
-                      }"
-                      draggable="true"
-                      @dragstart="handleHeaderDragStart($event, index)"
-                      @dragover.prevent="handleHeaderDragOver($event, index)"
-                      @dragenter.prevent="handleHeaderDragEnter($event, index)"
-                      @dragleave.prevent="handleHeaderDragLeave($event, index)"
-                      @drop="handleHeaderDrop($event, index)"
-                    >
-                      <div class="flex items-center justify-center h-full">
-                        {{ header }}
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr 
-                    v-for="(row, rowIndex) in paginatedData" 
-                    :key="rowIndex"
-                    class="hover:bg-gray-50"
-                  >
-                    <td class="whitespace-nowrap py-1 px-2 text-sm text-gray-500 text-center bg-white relative border border-gray-300">
-                      {{ getActualRowIndex(rowIndex) }}
-                    </td>
-                    <td
-                      v-for="(_, cellIndex) in row"
-                      :key="cellIndex"
-                      class="text-sm text-gray-500 bg-white relative border border-gray-300 hover:border-indigo-400"
-                    >
-                      <div class="p-0.5">
-                        <textarea
-                          v-model="csvData[getActualRowIndex(rowIndex)][cellIndex]"
-                          class="w-full h-full resize-none outline-none bg-transparent text-sm text-gray-900"
-                          @change="handleCellChange"
-                          @focus="handleCellFocus($event)"
-                          @blur="handleCellBlur($event)"
-                          @input="autoResize($event)"
-                          ref="textareas"
-                          rows="1"
-                        ></textarea>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      <td class="whitespace-nowrap py-1 px-2 text-sm text-gray-500 text-center bg-gray-50 relative border border-gray-200">
+                        {{ getActualRowIndex(rowIndex) }}
+                      </td>
+                      <td
+                        v-for="(_, cellIndex) in row"
+                        :key="cellIndex"
+                        class="text-sm text-gray-500 bg-white relative border border-gray-200 hover:border-indigo-400"
+                      >
+                        <div class="p-0.5">
+                          <textarea
+                            v-model="csvData[getActualRowIndex(rowIndex)][cellIndex]"
+                            class="w-full h-full resize-none outline-none bg-transparent text-sm text-gray-900"
+                            @change="handleCellChange"
+                            @focus="handleCellFocus($event)"
+                            @blur="handleCellBlur($event)"
+                            @input="autoResize($event)"
+                            ref="textareas"
+                            rows="1"
+                          ></textarea>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
           <!-- 分页控制 -->
-          <div v-if="csvData.length" class="mt-4 flex items-center justify-between">
+          <div v-if="csvData.length" class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2">
               <span class="text-sm text-gray-600">每页显示:</span>
               <select 
                 v-model="pageSize" 
-                class="block w-32 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 text-sm"
+                class="block w-32 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-indigo-600 text-sm"
                 @change="handlePageSizeChange"
               >
                 <option value="50">50行</option>
@@ -212,12 +220,12 @@
                 <option value="500">500行</option>
               </select>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex flex-col sm:flex-row items-center gap-4">
               <div class="flex items-center gap-2">
                 <button 
                   @click="prevPage" 
                   :disabled="currentPage === 1"
-                  class="inline-flex items-center justify-center rounded-md bg-white p-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                  class="inline-flex items-center justify-center rounded-md bg-white p-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -241,7 +249,7 @@
                 <button 
                   @click="nextPage" 
                   :disabled="currentPage === totalPages"
-                  class="inline-flex items-center justify-center rounded-md bg-white p-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                  class="inline-flex items-center justify-center rounded-md bg-white p-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -285,10 +293,18 @@ const dragOffsetX = ref(0)
 const dragOffsetY = ref(0)
 const copySuccess = ref(false)
 const inputMode = ref<'file' | 'text'>('file')
+const fileName = ref('')
+
+// 触摸相关状态
+const touchStartX = ref(0)
+const touchStartY = ref(0)
+const touchStartTime = ref(0)
+const touchMoveThreshold = 10 // 触摸移动阈值
+const longPressThreshold = 500 // 长按阈值
 
 // 计算总页数
 const totalPages = computed(() => {
-  return Math.ceil((csvData.value.length - 1) / pageSize.value)
+  return Math.ceil((csvData.value.length - 1) / Number(pageSize.value))
 })
 
 // 计算要显示的页码
@@ -325,24 +341,26 @@ const displayedPages = computed(() => {
 
 // 获取当前页的数据
 const paginatedData = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  return csvData.value.slice(1).slice(start, end)
+  const dataWithoutHeaders = csvData.value.slice(1)
+  const start = (currentPage.value - 1) * Number(pageSize.value)
+  const end = start + Number(pageSize.value)
+  return dataWithoutHeaders.slice(start, end)
 })
 
 // 获取实际的行索引
 const getActualRowIndex = (index: number) => {
-  return (currentPage.value - 1) * pageSize.value + index + 1
+  return (currentPage.value - 1) * Number(pageSize.value) + index + 1
 }
 
 // 获取列宽度
 const getColumnWidth = (_: number) => {
-  return 120
+  return 100
 }
 
 // 自动调整文本域高度
 const autoResize = (event: Event) => {
   const textarea = event.target as HTMLTextAreaElement
+  if (textarea.id === 'csv-input') return
   textarea.style.height = 'auto'
   textarea.style.height = textarea.scrollHeight + 'px'
 }
@@ -351,6 +369,7 @@ const autoResize = (event: Event) => {
 const initTextareaHeights = () => {
   const textareas = document.querySelectorAll('textarea')
   textareas.forEach(textarea => {
+    if (textarea.id === 'csv-input') return
     textarea.style.height = 'auto'
     textarea.style.height = textarea.scrollHeight + 'px'
   })
@@ -518,11 +537,25 @@ const copyToClipboard = async () => {
 const downloadCsv = () => {
   if (!csvData.value.length) return
 
+  // 生成时间戳
+  const now = new Date()
+  const timestamp = `${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`
+  
+  // 生成文件名
+  let outputFileName = 'data'
+  if (fileName.value) {
+    // 提取不带扩展名的文件名
+    const nameWithoutExt = fileName.value.replace(/\.[^/.]+$/, "")
+    outputFileName = nameWithoutExt
+  }
+  
+  const finalFileName = `${outputFileName}-${timestamp}.csv`
+
   const csvContent = Papa.unparse(csvData.value)
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
   const link = document.createElement('a')
   link.href = URL.createObjectURL(blob)
-  link.download = 'edited_data.csv'
+  link.download = finalFileName
   link.click()
 }
 
@@ -541,6 +574,8 @@ const prevPage = () => {
 
 const handlePageSizeChange = () => {
   currentPage.value = 1
+  // 确保pageSize是数字类型
+  pageSize.value = Number(pageSize.value)
 }
 
 const handleCellFocus = (event: FocusEvent) => {
@@ -577,33 +612,75 @@ const handleFileUpload = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
 
+  fileName.value = file.name
   isLoading.value = true
   currentPage.value = 1
 
-  Papa.parse(file, {
-    complete: (results) => {
-      if (results.data.length > 0) {
-        const filteredData = results.data.filter((row: unknown) => 
-          Array.isArray(row) && row.some(cell => cell !== null && cell !== '')
-        ) as string[][]
+  if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer)
+        const workbook = XLSX.read(data, { type: 'array' })
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 })
         
-        headers.value = filteredData[0]
-        csvData.value = filteredData
+        if (jsonData.length > 0) {
+          const filteredData = jsonData.filter((row: unknown) => 
+            Array.isArray(row) && row.some(cell => cell !== null && cell !== '')
+          ) as string[][]
+          
+          headers.value = filteredData[0]
+          csvData.value = filteredData
+        }
+        isLoading.value = false
+      } catch (error) {
+        console.error('Error parsing Excel:', error)
+        alert('Excel解析错误，请检查文件格式')
+        isLoading.value = false
       }
-      isLoading.value = false
-    },
-    error: (error) => {
-      console.error('Error parsing CSV:', error)
-      alert('CSV解析错误，请检查文件格式')
-      isLoading.value = false
     }
-  })
+    reader.readAsArrayBuffer(file)
+  } else {
+    Papa.parse(file, {
+      complete: (results) => {
+        if (results.data.length > 0) {
+          const filteredData = results.data.filter((row: unknown) => 
+            Array.isArray(row) && row.some(cell => cell !== null && cell !== '')
+          ) as string[][]
+          
+          headers.value = filteredData[0]
+          csvData.value = filteredData
+        }
+        isLoading.value = false
+      },
+      error: (error) => {
+        console.error('Error parsing CSV:', error)
+        alert('CSV解析错误，请检查文件格式')
+        isLoading.value = false
+      }
+    })
+  }
 }
 
 // 导出为Excel
 const downloadExcel = () => {
   if (!csvData.value.length) return
 
+  // 生成时间戳
+  const now = new Date()
+  const timestamp = `${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`
+  
+  // 生成文件名
+  let outputFileName = 'data'
+  if (fileName.value) {
+    // 提取不带扩展名的文件名
+    const nameWithoutExt = fileName.value.replace(/\.[^/.]+$/, "")
+    outputFileName = nameWithoutExt
+  }
+  
+  const finalFileName = `${outputFileName}-${timestamp}.xlsx`
+  
   // 创建工作簿
   const wb = XLSX.utils.book_new()
   
@@ -614,13 +691,43 @@ const downloadExcel = () => {
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
   
   // 导出文件
-  XLSX.writeFile(wb, 'edited_data.xlsx')
+  XLSX.writeFile(wb, finalFileName)
+}
+
+// 处理触摸开始
+const handleTouchStart = (event: TouchEvent, index: number) => {
+  touchStartX.value = event.touches[0].clientX
+  touchStartY.value = event.touches[0].clientY
+  touchStartTime.value = Date.now()
+  
+  // 模拟长按事件
+  setTimeout(() => {
+    if (Date.now() - touchStartTime.value >= longPressThreshold) {
+      handleHeaderDragStart(event as any, index)
+    }
+  }, longPressThreshold)
+}
+
+// 处理触摸移动
+const handleTouchMove = (event: TouchEvent, index: number) => {
+  const touch = event.touches[0]
+  const deltaX = touch.clientX - touchStartX.value
+  const deltaY = touch.clientY - touchStartY.value
+  
+  if (Math.abs(deltaX) > touchMoveThreshold || Math.abs(deltaY) > touchMoveThreshold) {
+    handleHeaderDragOver(event as any, index)
+  }
+}
+
+// 处理触摸结束
+const handleTouchEnd = (event: TouchEvent, index: number) => {
+  handleDragEnd()
 }
 </script>
 
 <style scoped>
 .overflow-x-auto {
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 200px);
   overflow: auto;
   width: 100%;
 }
@@ -725,5 +832,87 @@ textarea:focus, input[type="text"]:focus {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+  .overflow-x-auto {
+    max-height: calc(100vh - 300px);
+  }
+
+  table {
+    font-size: 0.75rem;
+  }
+
+  th, td {
+    padding: 0.25rem !important;
+  }
+
+  textarea {
+    font-size: 0.75rem;
+    padding: 0.25rem !important;
+  }
+
+  .grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  .flex-col {
+    flex-direction: column;
+  }
+
+  .gap-2 {
+    gap: 0.5rem;
+  }
+
+  .p-4 {
+    padding: 1rem;
+  }
+
+  .py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .text-sm {
+    font-size: 0.75rem;
+  }
+
+  .h-5 {
+    height: 1.25rem;
+  }
+
+  .w-5 {
+    width: 1.25rem;
+  }
+
+  .mr-2 {
+    margin-right: 0.5rem;
+  }
+}
+
+/* 触摸优化 */
+th {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+td {
+  -webkit-tap-highlight-color: transparent;
+}
+
+textarea {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* 防止移动端双击缩放 */
+* {
+  touch-action: manipulation;
 }
 </style> 
