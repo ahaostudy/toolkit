@@ -68,6 +68,12 @@ export const implementedTools: Tool[] = [
     description: '实时预览HTML代码效果',
     path: '/html-preview',
     icon: CodeBracketSquareIcon
+  },
+  {
+    name: 'CSV工具',
+    description: '支持CSV文件的导入、预览和编辑',
+    path: '/csv-tool',
+    icon: TableCellsIcon
   }
 ]
 

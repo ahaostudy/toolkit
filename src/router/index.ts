@@ -44,6 +44,11 @@ const router = createRouter({
       component: () => import('../views/HtmlPreview.vue')
     },
     {
+      path: '/csv-tool',
+      name: 'csv-tool',
+      component: () => import('../views/CsvTool.vue')
+    },
+    {
       path: '/more',
       name: 'more',
       component: () => import('../views/MoreView.vue')
