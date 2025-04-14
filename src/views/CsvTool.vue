@@ -135,7 +135,7 @@
               <table class="border-collapse w-full">
                 <colgroup>
                   <col style="width: 60px">
-                  <col v-for="(header, index) in headers" :key="index" :style="{ width: getColumnWidth(index) + 'px' }">
+                  <col v-for="(_, index) in headers" :key="index" :style="{ width: getColumnWidth(index) + 'px' }">
                 </colgroup>
                 <thead class="sticky top-0 z-10">
                   <tr class="relative">
@@ -174,7 +174,7 @@
                       {{ getActualRowIndex(rowIndex) }}
                     </td>
                     <td
-                      v-for="(cell, cellIndex) in row"
+                      v-for="(_, cellIndex) in row"
                       :key="cellIndex"
                       class="text-sm text-gray-500 bg-white relative border border-gray-300 hover:border-indigo-400"
                     >
@@ -264,7 +264,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import Papa from 'papaparse'
 import * as XLSX from 'xlsx'
 
@@ -336,7 +336,7 @@ const getActualRowIndex = (index: number) => {
 }
 
 // 获取列宽度
-const getColumnWidth = (colIndex: number) => {
+const getColumnWidth = (_: number) => {
   return 120
 }
 
@@ -492,31 +492,6 @@ const handleTextInput = () => {
     }
   } catch (error) {
     console.error('Error parsing CSV:', error)
-  }
-}
-
-// 解析CSV文本
-const parseCsvText = () => {
-  if (!csvText.value) return
-
-  isLoading.value = true
-  currentPage.value = 1
-
-  try {
-    const results = Papa.parse(csvText.value)
-    if (results.data.length > 0) {
-      const filteredData = results.data.filter((row: unknown) => 
-        Array.isArray(row) && row.some(cell => cell !== null && cell !== '')
-      ) as string[][]
-      
-      headers.value = filteredData[0]
-      csvData.value = filteredData
-    }
-  } catch (error) {
-    console.error('Error parsing CSV:', error)
-    alert('CSV解析错误，请检查格式')
-  } finally {
-    isLoading.value = false
   }
 }
 

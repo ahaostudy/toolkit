@@ -19,7 +19,7 @@ const timestampUnit = ref<'ms' | 's'>('ms')
 const copySuccess = ref(false)
 
 // 更新当前时间戳
-let timer: number
+let timer: ReturnType<typeof setInterval>
 onMounted(() => {
   timer = setInterval(() => {
     currentTimestamp.value = Date.now()
@@ -157,37 +157,35 @@ const setCurrentTime = () => {
             <div>
               <label class="block text-sm font-medium text-gray-700">当前时间戳</label>
               <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="block w-full rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 bg-white">
-                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
-                      <div class="mb-2 sm:mb-0">
-                        <span class="text-sm text-gray-500">毫秒:</span>
-                        <span class="text-xl font-mono ml-1">{{ currentTimestamp }}</span>
-                      </div>
-                      <div>
-                        <span class="text-sm text-gray-500">秒:</span>
-                        <span class="text-xl font-mono ml-1">{{ currentTimestampInSeconds }}</span>
-                      </div>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                    <div class="mb-2 sm:mb-0">
+                      <span class="text-sm text-gray-500">毫秒:</span>
+                      <span class="text-xl font-mono ml-1">{{ currentTimestamp }}</span>
                     </div>
-                    <div class="flex space-x-2 mt-2 sm:mt-0">
-                      <button 
-                        @click="copyTimestamp(currentTimestamp)"
-                        class="inline-flex items-center rounded-md bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
-                      >
-                        复制毫秒
-                      </button>
-                      <button 
-                        @click="copyTimestamp(currentTimestampInSeconds)"
-                        class="inline-flex items-center rounded-md bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
-                      >
-                        复制秒
-                      </button>
+                    <div>
+                      <span class="text-sm text-gray-500">秒:</span>
+                      <span class="text-xl font-mono ml-1">{{ currentTimestampInSeconds }}</span>
                     </div>
                   </div>
-                  <p class="text-gray-600 mt-2">{{ timestampToDate(currentTimestamp) }}</p>
-                  <div v-if="copySuccess" class="absolute top-0 right-0 mt-2 mr-2 text-xs text-green-600">
-                    已复制!
+                  <div class="flex space-x-2 mt-2 sm:mt-0">
+                    <button 
+                      @click="copyTimestamp(currentTimestamp)"
+                      class="inline-flex items-center rounded-md bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
+                    >
+                      复制毫秒
+                    </button>
+                    <button 
+                      @click="copyTimestamp(currentTimestampInSeconds)"
+                      class="inline-flex items-center rounded-md bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
+                    >
+                      复制秒
+                    </button>
                   </div>
+                </div>
+                <p class="text-gray-600 mt-2">{{ timestampToDate(currentTimestamp) }}</p>
+                <div v-if="copySuccess" class="absolute top-0 right-0 mt-2 mr-2 text-xs text-green-600">
+                  已复制!
                 </div>
               </div>
             </div>
