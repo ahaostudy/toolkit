@@ -9,19 +9,28 @@ const jsonHistory = ref<string[]>([])
 
 const handleCellDoubleClick = (content: any) => {
   try {
-    // 保存当前内容到历史记录
-    jsonHistory.value.push(jsonInput.value)
+    let newContent = ''
     
     // 如果内容是对象或数组，转换为 JSON 字符串
     if (typeof content === 'object' && content !== null) {
-      jsonInput.value = JSON.stringify(content, null, 2)
+      newContent = JSON.stringify(content, null, 2)
     } else {
       // 尝试解析内容是否为 JSON 字符串
       const parsed = JSON.parse(content)
-      jsonInput.value = JSON.stringify(parsed, null, 2)
+      // 只有当解析后的内容是对象或数组时才更新
+      if (typeof parsed === 'object' && parsed !== null) {
+        newContent = JSON.stringify(parsed, null, 2)
+      }
+    }
+    
+    // 只有当成功获取到新内容时才更新
+    if (newContent) {
+      // 保存当前内容到历史记录
+      jsonHistory.value.push(jsonInput.value)
+      jsonInput.value = newContent
     }
   } catch (e) {
-    // 如果不是 JSON，不做任何处理
+    // 如果不是 JSON 或不是对象/数组，不做任何处理
   }
 }
 
