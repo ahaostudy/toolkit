@@ -163,7 +163,7 @@
                         @drop="handleHeaderDrop($event, index)"
                         @touchstart="handleTouchStart($event, index)"
                         @touchmove="handleTouchMove($event, index)"
-                        @touchend="handleTouchEnd($event, index)"
+                        @touchend="handleTouchEnd()"
                       >
                         <div class="flex items-center justify-center h-full">
                           {{ header }}
@@ -720,7 +720,7 @@ const handleTouchMove = (event: TouchEvent, index: number) => {
 }
 
 // 处理触摸结束
-const handleTouchEnd = (event: TouchEvent, index: number) => {
+const handleTouchEnd = () => {
   handleDragEnd()
 }
 </script>
