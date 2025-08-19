@@ -13,7 +13,8 @@ import {
   CalculatorIcon,
   DocumentDuplicateIcon,
   PlusIcon,
-  CodeBracketSquareIcon
+  CodeBracketSquareIcon,
+  LinkIcon
 } from '@heroicons/vue/24/outline'
 
 // 工具类型定义
@@ -74,6 +75,12 @@ export const implementedTools: Tool[] = [
     description: '支持CSV文件的导入、预览和编辑',
     path: '/csv-tool',
     icon: TableCellsIcon
+  },
+  {
+    name: 'URL参数解析',
+    description: '解析与构建URL查询参数',
+    path: '/url-params',
+    icon: LinkIcon
   }
 ]
 

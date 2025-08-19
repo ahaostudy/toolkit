@@ -49,6 +49,11 @@ const router = createRouter({
       component: () => import('../views/CsvTool.vue')
     },
     {
+      path: '/url-params/:data?',
+      name: 'url-params',
+      component: () => import('../views/UrlParamsTool.vue')
+    },
+    {
       path: '/more',
       name: 'more',
       component: () => import('../views/MoreView.vue')
